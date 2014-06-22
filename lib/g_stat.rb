@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require "g_stat/version"
+require 'g_stat/version'
 require 'g_stat/repository'
 
 module GStat
