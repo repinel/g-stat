@@ -10,6 +10,8 @@ module GStat
   class Repository
     include GStat::Helpers::Report
 
+    GIT_HUB_API_URL = 'https://api.github.com'.freeze
+
     attr_accessor :owner, :repo
 
     def initialize(params)
@@ -20,7 +22,12 @@ module GStat
 
     def report
       puts "GitHub: #{owner}/#{repo}\n\n"
-      releases_report
+
+      if exist?
+        releases_report
+      else
+        puts 'DOES NOT EXIST'
+      end
     end
 
     def releases_report(indentation=0)
@@ -28,7 +35,7 @@ module GStat
         print_entries 'Releases', indentation
 
         if releases.empty?
-          a 'NONE', indentation + 1
+          print_entries 'NONE', indentation + 1
         end
 
         releases.each_with_index do |release, i|
@@ -52,11 +59,24 @@ module GStat
       end
     end
 
+    def exist?
+      !info.nil?
+    end
+
+    def info
+      @info ||= api_call repository_url
+    end
+
     def releases
-      @releases ||= (body = request_body(releases_uri)) ? JSON.parse(body, symbolize_names: true) : nil
+      @releases ||= api_call releases_url
     end
 
     private
+
+    def api_call(uri)
+      body = request_body uri
+      body ? JSON.parse(body, symbolize_names: true) : nil
+    end
 
     def request_body(uri)
       uri = URI uri
@@ -68,8 +88,12 @@ module GStat
       end
     end
 
-    def releases_uri
-      URI "https://api.github.com/repos/#{owner}/#{repo}/releases"
+    def repository_url
+      "#{GIT_HUB_API_URL}/repos/#{owner}/#{repo}"
+    end
+
+    def releases_url
+      "#{repository_url}/releases"
     end
 
     def release_asset_download_url(release_name, asset_name)
