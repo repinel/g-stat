@@ -1,10 +1,28 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
+require 'optparse'
 require 'g_stat'
 
+options = {}
+opt_parser = OptionParser.new do |opts|
+  opts.banner = "Usage: g-stat [options] OWNER REPO"
+
+  opts.on_tail('-v', '--version', 'Show version') do |v|
+    puts GStat::VERSION
+    exit
+  end
+
+  opts.on_tail('-h', '--help', 'Show this message') do |v|
+    puts opts
+    exit
+  end
+end
+
+opt_parser.parse!
+
 if ARGV.length != 2
-  abort 'Usage: g_stat OWNER REPO'
+  abort opt_parser.to_s
 end
 
 GStat.run ARGV[0], ARGV[1]
