@@ -8,6 +8,7 @@ require 'g_stat/helpers'
 
 module GStat
   class Repository
+    include GStat::Helpers::Report
 
     attr_accessor :owner, :repo
 
@@ -17,16 +18,21 @@ module GStat
       end
     end
 
-    def run
+    def report
+      puts "GitHub: #{owner}/#{repo}\n\n"
       releases_report
     end
 
     def releases_report(indentation=0)
       if releases
-        GStat::Helpers::Report.print_infos 'Releases', indentation
+        print_entries 'Releases', indentation
+
+        if releases.empty?
+          a 'NONE', indentation + 1
+        end
 
         releases.each_with_index do |release, i|
-          GStat::Helpers::Report.print_infos([
+          print_entries([
                         ['Name', release[:name]], ['Tag Name', release[:tag_name]], ['Target', release[:target_commitish]],
                         ['Author', release[:author][:login]], ['Draft', release[:draft]], ['Pre-release', release[:prerelease]],
                         ['HTML URL', release[:html_url]], ['Created At', release[:created_at]], ['Published At', release[:published_at]],
@@ -34,7 +40,7 @@ module GStat
           ], indentation + 1)
 
           (assets = release[:assets]).each_with_index do |asset, j|
-            GStat::Helpers::Report.print_infos([
+            print_entries([
                           ['Name', asset[:name]], ['Download Count', asset[:download_count]],
                           ['Download URL', release_asset_download_url(release[:name], asset[:name])]
             ], indentation + 2)
@@ -47,7 +53,7 @@ module GStat
     end
 
     def releases
-      @releases ||= (body = request_body(releases_uri)) ? JSON.parse(body, symbolize_names: true) : []
+      @releases ||= (body = request_body(releases_uri)) ? JSON.parse(body, symbolize_names: true) : nil
     end
 
     private

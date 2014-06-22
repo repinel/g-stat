@@ -7,9 +7,9 @@ module GStat
 
   extend self
 
-  def run(owner, repository)
-    repo = GStat::Repository.new owner: owner, repo: repository
-    repo.run
+  def run(owner, repo)
+    repository = GStat::Repository.new owner: owner, repo: repo
+    repository.report
   end
 
 end
