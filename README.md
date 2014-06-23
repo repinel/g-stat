@@ -1,6 +1,10 @@
 # g-stat
 
-Useful GitHub statistics.
+A small application to get useful GitHub statistics via the GitHub API.
+
+For now, it just prints a simple report of releases.
+
+No credentials required.
 
 ## Installation
 
