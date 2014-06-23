@@ -2,9 +2,17 @@
 
 Useful GitHub Statistics
 
+## Installation
+
+Run `rake install` on the command line.
+
 ## Usage
 
-ruby -Ilib ./bin/g_stat OWNER REPOSITORY
+```
+Usage: g-stat [options] OWNER REPO
+    -v, --version                    Show version
+    -h, --help                       Show this message
+```
 
 ## License
 
