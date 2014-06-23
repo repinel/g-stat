@@ -1,6 +1,6 @@
 # g-stat
 
-Useful GitHub Statistics
+Useful GitHub statistics.
 
 ## Installation
 
