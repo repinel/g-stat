@@ -4,7 +4,7 @@ Useful GitHub Statistics
 
 ## Installation
 
-Run `rake install` on the command line.
+Run `bundle exec rake install` on the command line.
 
 ## Usage
 
